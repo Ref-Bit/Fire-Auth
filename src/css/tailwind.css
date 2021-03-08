@@ -5,6 +5,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
 
 
+form button {
+  box-shadow: 2px 2px 5px #babecc, -5px -5px 10px #ffffff73;
+}
+
+form button:focus {
+  outline: none;
+  box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #ffffff73;
+}
+
 /* Hero SVG Animation */
 svg#freepik_stories-login:not(.animated) .animable {
   opacity: 0;
