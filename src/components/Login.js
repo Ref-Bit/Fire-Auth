@@ -6,7 +6,7 @@ import Form from "./Form";
 export default function Login() {
   const emailRef = useRef();
   const passRef = useRef();
-  // const { signin } = useAuth();
+  const { signin } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,16 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submitted!")
+    try {
+      setError('');
+      setLoading(true);
+      await signin(emailRef.current.value, passRef.current.value);
+      notifySuccess();
+    } catch (err) {
+      setError('Failed to log in', err.message);
+      notifyError();
+    }
+    setLoading(false);
   }
 
   return (
