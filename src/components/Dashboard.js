@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { motion } from "framer-motion";
+import { useAuth } from '../contexts/Auth';
+import { useHistory } from 'react-router';
+import { toast, Toaster } from 'react-hot-toast';
 
 const mobile_variants = {
   open: { opacity: 1, x: 0 },
@@ -13,9 +16,27 @@ const desktop_variants = {
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState('');
+  const { currentUser, signout } = useAuth();
+  const history = useHistory();
+
+  const notifyError = () => toast.error(error);
+
+  const handleSignout = async () => {
+    setError('');
+
+    try {
+      await signout();
+      history("/login");
+    } catch (err) {
+      setError('Failed to log out');
+      notifyError();
+    }
+  }
 
   return (
     <motion.div exit={{ opacity: 0 }}>
+      <Toaster />
       <nav className="dark:bg-gray-900 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -41,9 +62,9 @@ export default function Dashboard() {
                   <motion.div
                     animate={isOpen ? "open" : "closed"}
                     variants={desktop_variants}
-                    className={`${isOpen ? '' : 'hidden'} origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                    <span className="block px-4 py-2 text-sm text-gray-900" role="menuitem">Welcome Refaat</span>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100" role="menuitem">Sign out</a>
+                    className={`${isOpen ? '' : 'hidden'} origin-top-right absolute right-0 mt-2 w-48 text-center rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                    <span className="block px-4 py-2 text-sm text-gray-900" role="menuitem">{currentUser.email}</span>
+                    <button onClick={handleSignout} className="block w-full px-4 py-2 text-sm text-gray-900 hover:bg-gray-100" role="menuitem">Sign out</button>
                   </motion.div>
                 </div>
               </div>
@@ -77,13 +98,11 @@ export default function Dashboard() {
                 <img className="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
               </div>
               <div className="ml-3">
-                <div className="text-base font-medium leading-none dark:text-gray-50 to-gray-900 mb-2">Tom Cook</div>
-                <div className="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
+                <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
               </div>
             </div>
             <div className="mt-3 px-2 space-y-1">
-              <span className="block px-3 py-2 rounded-md text-base font-medium text-gray-900">Welcome Refaat</span>
-              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-gray-50 hover:bg-teal-500">Sign out</a>
+              <button className="block px-3 py-2 rounded-md text-base font-medium dark:text-gray-50 text-gray-900 hover:bg-teal-500">Sign out</button>
             </div>
           </motion.div>
         </div>
