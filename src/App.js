@@ -1,4 +1,4 @@
-import { Dashboard, Login, Signup } from './components';
+import { Dashboard, Login, Signup, PrivateRoute } from './components';
 import AuthProvider from './contexts/Auth';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from "framer-motion";
@@ -11,7 +11,7 @@ function App() {
       <AuthProvider>
         <AnimatePresence exitBeforeEnter>
           <Switch location={location} key={location.pathname}>
-            <Route exact path="/" component={Dashboard} />
+            <PrivateRoute exact path="/" component={Dashboard} />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
           </Switch>

@@ -1,8 +1,8 @@
-import { Toaster } from 'react-hot-toast';
 import { Link } from "react-router-dom";
-import { Hero } from '.';
+import { Hero } from '..';
+import { ToastContainer } from 'react-toastify';
 
-export default function Form({ isSignup, title, handleSubmit, emailRef, passRef, passConfRef, loading }) {
+export default function Form({ isSignup, title, handleSubmit, emailRef, passRef, passConfRef, loading, autoClose }) {
   return (
     <div className="py-16 px-8">
       <div className="flex flex-col-reverse lg:flex-row justify-between items-center">
@@ -10,7 +10,7 @@ export default function Form({ isSignup, title, handleSubmit, emailRef, passRef,
           <h1 className="text-4xl lg:text-6xl dark:text-teal-300 text-teal-500 mb-4">Fire Auth App</h1>
           <p className="dark:text-gray-50 text-gray-900">Please fill all the fields below.</p>
           <div className="lg:w-2/3 dark:bg-gray-50 bg-gray-100 rounded-lg py-10 px-8 mt-6 shadow-xl">
-            <Toaster />
+            <ToastContainer position="top-center" toastClassName="w-96" bodyClassName="font-sans text-white" autoClose={autoClose} />
             <div className="text-3xl font-semibold mb-8 text-gray-900">{title}</div>
             <form onSubmit={handleSubmit}>
               <div className="w-full mb-5">

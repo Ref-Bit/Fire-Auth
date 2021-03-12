@@ -23,6 +23,8 @@ export default function AuthProvider({ children }) {
     return auth.signOut();
   }
 
+  const autoClose = 2000;
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
@@ -31,7 +33,7 @@ export default function AuthProvider({ children }) {
     return unsubscribe;
   }, [])
 
-  const value = { currentUser, signup, signin, signout }
+  const value = { autoClose, currentUser, signup, signin, signout }
 
   return (
     <AuthContext.Provider value={value}>

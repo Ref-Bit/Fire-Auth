@@ -1,42 +1,41 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../contexts/Auth";
-import toast from 'react-hot-toast';
-import Form from "./Form";
+import { toast } from 'react-toastify';
+import { Msg, Form } from ".";
 import { useHistory } from "react-router";
 
 export default function Signup() {
   const emailRef = useRef();
   const passRef = useRef();
   const passConfRef = useRef();
-  const { signup } = useAuth();
+  const { signup, autoClose } = useAuth();
   const history = useHistory();
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const notifyError = () => toast.error(error);
-  const notifySuccess = () => toast.success('User logged in successfully!. Redirect to Dashboard');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (passRef.current.value !== passConfRef.current.value) {
-      setError("Passwords don't match");
-      notifyError();
+      toast.error(<Msg msg="Passwords don't match" isError={true} />, {
+        toastId: "error"
+      });
       return;
     }
 
     try {
-      setError('');
       setLoading(true);
       await signup(emailRef.current.value, passRef.current.value);
-      notifySuccess();
-      setInterval(() => {
+      toast.success(<Msg msg='User signed up successfully' isError={false} />, {
+        toastId: 'success'
+      });
+      setTimeout(() => {
         history.push("/");
-      }, 2000)
+      }, autoClose);
     } catch (err) {
-      setError('Failed to create account');
-      notifyError();
+      toast.error(<Msg msg={err.message.toLowerCase()} isError={true} />, {
+        toastId: "error"
+      });
     }
     setLoading(false);
   }
@@ -44,7 +43,7 @@ export default function Signup() {
 
   return (
     <motion.div exit={{ opacity: 0 }}>
-      <Form isSignup={true} title="Sign Up" handleSubmit={handleSubmit} emailRef={emailRef} passRef={passRef} passConfRef={passConfRef} loading={loading} />
+      <Form isSignup={true} title="Sign Up" handleSubmit={handleSubmit} emailRef={emailRef} passRef={passRef} passConfRef={passConfRef} loading={loading} autoClose={autoClose} />
     </motion.div>
   )
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from "framer-motion";
 import { useAuth } from '../contexts/Auth';
 import { useHistory } from 'react-router';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast, ToastContainer } from 'react-toastify';
 
 const mobile_variants = {
   open: { opacity: 1, x: 0 },
@@ -16,27 +16,21 @@ const desktop_variants = {
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState('');
   const { currentUser, signout } = useAuth();
   const history = useHistory();
 
-  const notifyError = () => toast.error(error);
-
   const handleSignout = async () => {
-    setError('');
-
     try {
       await signout();
       history("/login");
     } catch (err) {
-      setError('Failed to log out');
-      notifyError();
+      toast.error('Failed to log out');
     }
   }
 
   return (
     <motion.div exit={{ opacity: 0 }}>
-      <Toaster />
+      <ToastContainer position="top-center" toastClassName="w-96" bodyClassName="font-sans text-white" />
       <nav className="dark:bg-gray-900 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -74,11 +68,11 @@ export default function Dashboard() {
                 <span className="sr-only">Open main menu</span>
 
                 <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
 
                 <svg className="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
