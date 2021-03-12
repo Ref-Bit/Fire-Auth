@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Hero } from '..';
+import { ForgotPassword, Hero } from '..';
 import { ToastContainer } from 'react-toastify';
 
 export default function Form({ isSignup, title, handleSubmit, emailRef, passRef, passConfRef, loading, autoClose }) {
@@ -34,6 +34,7 @@ export default function Form({ isSignup, title, handleSubmit, emailRef, passRef,
                   <input type="password" ref={passConfRef} className="text-sm lg:text-md dark:bg-gray-100 bg-gray-200 shadow-inner w-full -ml-10 pl-10 pr-3 py-2 rounded border-2 dark:border-gray-100 border-gray-200 outline-none focus:border-teal-600 transition duration-300" placeholder="************" />
                 </div>
               </div>}
+              {!isSignup && <ForgotPassword />}
               <button disabled={loading} className="w-full h-12 text-gray-900 text-lg font-semibold outline-none border-0 rounded dark:bg-gray-100 bg-gray-200 focus:text-teal-500">{title}</button>
               {isSignup ? (
                 <div className="mt-5">Already a member?&nbsp;

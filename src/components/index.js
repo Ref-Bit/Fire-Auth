@@ -5,3 +5,4 @@ export { default as Dashboard } from './Dashboard';
 export { default as Form } from './partials/Form';
 export { default as Msg } from './partials/Msg';
 export { default as PrivateRoute } from './partials/PrivateRoute';
+export { default as ForgotPassword } from './partials/ForgotPassword';
