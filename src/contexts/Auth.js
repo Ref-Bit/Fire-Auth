@@ -23,6 +23,10 @@ export default function AuthProvider({ children }) {
     return auth.signOut();
   }
 
+  function resetPassword(email) {
+    return auth.sendPasswordResetEmail(email);
+  }
+
   const autoClose = 2000;
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export default function AuthProvider({ children }) {
     return unsubscribe;
   }, [])
 
-  const value = { autoClose, currentUser, signup, signin, signout }
+  const value = { autoClose, currentUser, signup, signin, signout, resetPassword }
 
   return (
     <AuthContext.Provider value={value}>

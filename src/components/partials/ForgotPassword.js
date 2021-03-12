@@ -1,22 +1,47 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useAuth } from "../../contexts/Auth";
+import { toast } from 'react-toastify';
+import { Msg } from '..';
 
 export default function ForgotPassword() {
   const [show, setShow] = useState(false);
   const modalRef = useRef(null);
   const emailRef = useRef(null);
+  const { resetPassword } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  const hideModal = () => {
+    modalRef.current.classList.remove('fadeIn');
+    modalRef.current.classList.add('fadeOut');
+    setTimeout(() => {
+      setShow(false);
+    }, 500);
+  }
 
   const escPress = useCallback(
     e => {
-      if (e.key === 'Escape' && show) {
-        modalRef?.current.classList.remove('fadeIn');
-        modalRef?.current.classList.add('fadeOut');
-        setTimeout(() => {
-          setShow(false);
-        }, 500);
-      }
+      if (e.key === 'Escape' && show) hideModal();
     },
     [setShow, show]
   );
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      await resetPassword(emailRef.current.value);
+      hideModal();
+      toast.success(<Msg msg="Check your inbox for further instructions" isError={false} />, {
+        toastId: "success",
+      });
+    } catch (err) {
+      toast.error(<Msg msg={err.message.toLowerCase()} isError={true} />, {
+        toastId: "error",
+      });
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
     document.addEventListener('keydown', escPress);
@@ -61,17 +86,11 @@ export default function ForgotPassword() {
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-500 text-base font-medium text-white hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-700 sm:ml-3 sm:w-auto sm:text-sm transition duration-300">
-                  Submit
+                <button disabled={loading} onClick={handleClick} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-500 text-base font-medium text-white hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-700 sm:ml-3 sm:w-auto sm:text-sm transition duration-300">
+                  Send
                 </button>
                 <button
-                  onClick={() => {
-                    modalRef.current.classList.remove('fadeIn');
-                    modalRef.current.classList.add('fadeOut');
-                    setTimeout(() => {
-                      setShow(false);
-                    }, 500);
-                  }}
+                  onClick={hideModal}
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition duration-300">
                   Cancel
