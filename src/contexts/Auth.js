@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase';
 
 const AuthContext = createContext();
@@ -27,21 +27,38 @@ export default function AuthProvider({ children }) {
     return auth.sendPasswordResetEmail(email);
   }
 
+  function updateEmail(email) {
+    return currentUser.updateEmail(email);
+  }
+
+  function updatePassword(password) {
+    return currentUser.updatePassword(password);
+  }
+
   const autoClose = 2000;
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      setCurrentUser(user)
-      setLoading(false)
-    })
+      setCurrentUser(user);
+      setLoading(false);
+    });
     return unsubscribe;
-  }, [])
+  }, []);
 
-  const value = { autoClose, currentUser, signup, signin, signout, resetPassword }
+  const value = {
+    autoClose,
+    currentUser,
+    signup,
+    signin,
+    signout,
+    resetPassword,
+    updateEmail,
+    updatePassword,
+  };
 
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>
-  )
+  );
 }

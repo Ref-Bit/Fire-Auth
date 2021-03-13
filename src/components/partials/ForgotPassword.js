@@ -22,7 +22,7 @@ export default function ForgotPassword() {
     e => {
       if (e.key === 'Escape' && show) hideModal();
     },
-    [setShow, show]
+    [show]
   );
 
   const handleClick = async (e) => {
